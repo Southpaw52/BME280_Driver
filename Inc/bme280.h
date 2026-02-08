@@ -36,7 +36,7 @@
 #define BME280_PRESS_XLSB         (0xF9U)
 
 /* -------------------- Status register ---------------------------- */
-#define BME280_STATUS             (0xF3U)
+#define BME280_STATUS                  (0xF3U)
 #define BME280_STATUS_MEASURING_MASK   (0x08U)   /* bit[3]: measurement in progress */
 
 /* ctrl_meas: temperature & pressure oversampling + power mode */
@@ -77,8 +77,8 @@
  */
 
 /* 7-bit I2C addresses depending on SDO pin state */
-#define BME280_SDO_LOW            ((0x76U)<<1)
-#define BME280_SDO_HIGH           ((0x77U)<<1)
+#define BME280_SDO_LOW            ((0x76U) << 1)
+#define BME280_SDO_HIGH           ((0x77U) << 1)
 
 /* Soft reset command */
 #define BME280_SOFT_RESET_CMD   (0xB6U)
@@ -129,11 +129,11 @@ typedef struct
  */
 
 /* Temperature + Pressure calibration block */
-#define BME280_CALIB_TP_START     0x88
+#define BME280_CALIB_TP_START     (0x88U)
 #define BME280_CALIB_TP_LEN       26
 
 /* Humidity calibration block */
-#define BME280_CALIB_H_START      0xE1
+#define BME280_CALIB_H_START      (0xE1U)
 #define BME280_CALIB_H_LEN        7
 
 /* ============================================================
