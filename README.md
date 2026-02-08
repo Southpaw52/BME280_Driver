@@ -1,15 +1,14 @@
 # 🌡️ BME280 Driver (C)
 
- Lightweight and platform-independent C driver for the **Bosch BME280** environmental sensor  
- (temperature, pressure, and humidity).  
- Tested on **STM32F407** with custom low-level drivers.
+Lightweight and platform-independent C driver for the Bosch BME280 environmental sensor (temperature, pressure, and humidity).
+Tested on STM32F407 using STM32 HAL I2C drivers.
 
 ---
 
 ## 📌 Features
 | Feature | Description |
 |----------|--------------|
-| Communication | I²C (user-provided low-level read/write functions) |
+| Communication | I²C (HAL-based low-level interface, user adaptable) |
 | Temperature | Read ambient temperature (°C) |
 | Pressure | Read air pressure (Pa) |
 | Humidity | Read relative humidity (%RH) |
