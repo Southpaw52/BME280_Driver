@@ -9,7 +9,7 @@ Tested on STM32F407 using STM32 HAL I2C drivers.
 | Feature | Description |
 |----------|--------------|
 | Communication | I²C (HAL-based low-level interface, user adaptable) |
-| Temperature | Read ambient temperature (°C) |
+| Temperature | Read environmental temperature (°C) |
 | Pressure | Read air pressure (Pa) |
 | Humidity | Read relative humidity (%RH) |
 | Configuration | Oversampling, IIR filter, standby time, and power modes |
