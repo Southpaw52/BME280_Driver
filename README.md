@@ -18,32 +18,34 @@ Tested on STM32F407 using STM32 HAL I2C drivers.
 
 ## 🧠 Usage Example
 ```c
-/* Platform-specific I²C read/write functions must be provided by the user */ 
+/* Platform-specific I²C read/write functions must be provided by the user */
+#include "main.h"
 #include "bme280.h"
 
-bme280_dev_t bme = {
-    .dev_addr  = BME280_I2C_ADDR_PRIM,   // 0x76 (default) or BME280_I2C_ADDR_SEC (0x77)
-    .osr_t     = BME280_OSR_T_2X,
-    .osr_p     = BME280_OSR_P_4X,
-    .osr_h     = BME280_OSR_H_1X,
-    .filter    = BME280_FILTER_4,
-    .standby   = BME280_STBY_1000_MS,
-    .mode      = BME280_MODE_NORMAL,
-    .i2c_read  = platform_i2c_read,
-    .i2c_write = platform_i2c_write,
-    .delay_ms  = platform_delay_ms
-};
+/* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
 
-bme280_data_t data;
+bme280_raw_t raw;
+double T, P, H;
 
-if (bme280_init(&bme) == BME280_OK) {
-    while (1) {
-        if (bme280_read_all(&bme, &data) == BME280_OK) {
-            printf("Temp=%.2f °C | Pressure=%.2f Pa | Humidity=%.2f %%RH\n",
-                   data.temperature_c,
-                   data.pressure_pa,
-                   data.humidity_rh);
-        }
-        platform_delay_ms(1000);
-    }
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_I2C1_Init(void);
+
+int main ()
+{
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_I2C1_Init();
+    HAL_StatusTypeDef st;
+    st = bme280_init();          
+    st = bme280_force_measure(); 
+    while (bme280_is_measuring()) {}  
+    st = bme280_read_raw(&raw);  
+    T = bme280_compensate_T_double(raw.adc_T);  
+    P = bme280_compensate_P_double(raw.adc_P);  
+    H = bme280_compensate_H_double(raw.adc_H);
 }
+
