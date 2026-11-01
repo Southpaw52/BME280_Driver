@@ -1,51 +1,53 @@
-# 🌡️ BME280 Driver (C)
+# BME280 Driver for STM32 HAL
 
-Lightweight and platform-independent C driver for the Bosch BME280 environmental sensor (temperature, pressure, and humidity).
-Tested on STM32F407 using STM32 HAL I2C drivers.
+**Author: southpaw**
 
----
+A C implementation for reading temperature, pressure and relative humidity
+from a Bosch BME280 using STM32 HAL I2C.
 
-## 📌 Features
-| Feature | Description |
-|----------|--------------|
-| Communication | I²C (HAL-based low-level interface, user adaptable) |
-| Temperature | Read environmental temperature (°C) |
-| Pressure | Read air pressure (Pa) |
-| Humidity | Read relative humidity (%RH) |
-| Configuration | Oversampling, IIR filter, standby time, and power modes |
+| Interface | Measurements | Platform |
+|---|---|---|
+| I2C | Temperature (°C), pressure (Pa), humidity (%RH) | STM32F4 HAL |
 
----
+## Project scope
 
-## 🧠 Usage Example
-```c
-/* Platform-specific I²C read/write functions must be provided by the user */
-#include "main.h"
-#include "bme280.h"
+The repository contains sensor register definitions, calibration structures,
+initialization, forced-mode control, raw register decoding and floating-point
+compensation functions. The implementation uses STM32 HAL directly.
 
-/* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
+## Source map
 
-bme280_raw_t raw;
-double T, P, H;
+| Path | Purpose |
+|---|---|
+| [Inc/bme280.h](Inc/bme280.h) | Public declarations and register definitions |
+| [Src/bme280.c](Src/bme280.c) | Sensor initialization, reads and compensation |
+| [Examples/main.c](Examples/main.c) | STM32 integration example |
 
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_I2C1_Init(void);
+## Integration notes
 
-int main ()
-{
-    HAL_Init();
-    SystemClock_Config();
-    MX_GPIO_Init();
-    MX_I2C1_Init();
-    HAL_StatusTypeDef st;
-    st = bme280_init();          
-    st = bme280_force_measure(); 
-    while (bme280_is_measuring()) {}  
-    st = bme280_read_raw(&raw);  
-    T = bme280_compensate_T_double(raw.adc_T);  
-    P = bme280_compensate_P_double(raw.adc_P);  
-    H = bme280_compensate_H_double(raw.adc_H);
-}
+The application must supply STM32 HAL, the I2C handle, clocks, GPIO alternate
+functions, pull-ups and board-specific startup configuration. The example is
+a starting point for integration, rather than a complete firmware build.
 
+Compensate temperature before pressure and humidity because those calculations
+depend on the temperature-derived fine-resolution value. A forced conversion
+must be triggered for each new sample; callers should check HAL return values
+and impose bounded waits.
+
+## Current status
+
+This is an educational driver project. The published source still needs
+integration cleanup: the implementation's include/state definitions and the
+example's header naming must be reconciled before claiming a standalone build.
+The repository does not currently include an automated test runner.
+No new tests or hardware checks were run for this documentation update.
+
+## Reference
+
+[Bosch BME280 datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf)
+
+## Authorship and licensing
+
+Application code and sensor integration: **southpaw**.
+Third-party HAL and reference materials retain their own attribution.
+A project-wide license has not yet been selected.
