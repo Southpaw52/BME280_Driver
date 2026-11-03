@@ -1,0 +1,11 @@
+build/
+Debug/
+Release/
+.settings/
+*.o
+*.d
+*.elf
+*.map
+*.su
+.vscode/
+__pycache__/

@@ -50,4 +50,4 @@ No new tests or hardware checks were run for this documentation update.
 
 Application code and sensor integration: **southpaw**.
 Third-party HAL and reference materials retain their own attribution.
-A project-wide license has not yet been selected.
+Application code is MIT-licensed (see LICENSE); third-party components keep their own licenses.
